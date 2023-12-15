@@ -134,6 +134,9 @@ Retorna a quantidade de documentos.
 ```
 db.clientes.find().count()
 ```
+```
+db.clientes.count()
+```
 
 #### distinct
 ```
@@ -278,6 +281,173 @@ db.clientes.find({dependentes: {$size: 2}}, {dependentes: {$slice:1}})
 Agrupa por um campo especificado
 ```
 db.contas.aggregate({$group: {_id:"$tipo"}})
+```
+
+#### $limit
+```
+db.contas.aggregate({$limit:5})
+```
+
+#### $skip
+```
+db.contas.aggregate({$skip:5})
+```
+
+#### $sort
+```
+db.contas.aggregate({$sort:{valor: -1}})
+```
+
+#### Combinar estágios no aggregate
+```
+db.contas.aggregate([{$skip:15}, {$limit:5}, {$sort:{valor: -1}}])
+```
+
+#### unwind 
+Desconstroi a matriz a partir de um campo selecionado
+```
+db.clientes.aggregate([{$unwind:"$seguros"}])
+```
+
+#### sortByCount
+```
+db.clientes.aggregate([{$unwind:"$seguros"}, {$sortByCount:"$genero"}])
+```
+
+#### match 
+Aplicar filtros
+```
+db.enderecos.aggregate([{$match:{cidade:"Recife"}}])
+```
+
+```
+db.contas.aggregate([
+    {
+        $match: {
+            $and: [
+                {tipo: {$eq:"Conta salário"}}, 
+                {valor:{$gt: 3500}}
+            ]
+        }
+    }
+])
+```
+
+#### $avg 
+Operador acumulador que retorna média.
+```
+db.contas.aggregate({
+    $group: {
+        _id: "$tipo",
+        media: {
+            $avg: "$valor"
+        }
+    }
+})
+```
+
+#### $max
+Operador acumulador que retorna o valor máximo.
+```
+db.contas.aggregate({
+    $group: {
+        _id: "$tipo",
+        valorMaximo: {
+            $max: "$valor"
+        }
+    }
+})
+```
+
+#### $min
+Operador acumulador que retorna o valor mínimo.
+```
+db.contas.aggregate({
+    $group: {
+        _id: "$tipo",
+        valorMinimo: {
+            $min: "$valor"
+        }
+    }
+})
+```
+
+#### $count
+Operador acumulador que retorna o valor contagem.
+```
+db.contas.aggregate({
+    $group: {
+        _id: "$tipo",
+        contagem: {
+            $count:{}
+        }
+    }
+})
+```
+
+#### $sum
+Operador acumulador que retorna o valor total.
+```
+db.contas.aggregate({
+    $group: {
+        _id: "$tipo",
+        Total: {
+            $sum:"$valor"
+        }
+    }
+})
+```
+
+#### Combinando operadores acumuladores
+Retorna soma e média.
+```
+db.contas.aggregate({
+    $group: {
+        _id: "$tipo",
+        Total: {
+            $sum:"$valor"
+        },
+        Media: {
+            $avg: "$valor"
+        }
+    }
+})
+```
+
+Retornar Soma e Média e filtra.
+```
+db.contas.aggregate(
+    { 
+        $match: {tipo: "Conta poupança"}
+    },
+    {
+        $group: {
+            _id: "$tipo",
+            Total: {
+                $sum:"$valor"
+            },
+            Media: {
+                $avg: "$valor"
+            }
+        }
+    }
+)
+```
+
+Retorna Soma, Média, Máximo e Mínimo.
+```
+db.contas.aggregate([
+    {$group:{
+        _id:null,
+        Soma:{$sum:"$valor"},
+        Media:{$avg:"$valor"},
+        Maximo:{$max:"$valor"},
+        Minimo:{$min:"$valor"}
+    }
+},{
+    $project: {
+      _id: 0    }  }
+])
 ```
 
 
