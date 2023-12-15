@@ -5,9 +5,10 @@
 Descrição MOngoDB
 
 ### Insert
+Inserir documento(s) de uma collection.
 
 #### InsertOne
-Faz o insert de um documento
+Faz o insert de um documento.
 ```
 db.clientes.insertOne(
      {      
@@ -22,7 +23,7 @@ db.clientes.insertOne(
 ```
 
 #### InsertMany
-Faz o insert de vários documentos
+Faz o insert de vários documentos.
 ```
 db.clientes.insertOne([
     {      
@@ -52,11 +53,68 @@ db.clientes.insertOne([
 ])
 ```
 
+### Update
+Atualizar documento(s) de uma collection.
+
 #### UpdateOne
-Faz o update de um documento
+Faz o update de um documento.
 ```
 db.series.updateOne(
     {"Série": "Grimm"},
     {$set: {"Classificação": "16+"}}   
 )
 ```
+
+#### UpdateMany
+Faz o update de vários documentos.
+```
+db.restaurant.updateMany(
+    { violations: { $gt: 4 } },
+    { $set: { "Review" : true } }
+)
+```
+
+### Delete
+Excluir documento(s) de uma collection.
+
+#### DeleteOne
+Exclui um único documento.
+```
+db.series.deleteOne(
+    {"Série": "The Boys"}
+)
+```
+
+#### DeleteMany
+Exclui vários documentos.
+```
+db.series.deleteMany(
+    {"Temporadas": 1}
+)
+```
+
+Exclui todos os documentos da collection
+```
+db.series.deleteMany({})
+```
+
+### Find
+Realizar consultas
+
+Retornar todos
+```
+db.series.find()
+```
+
+#### Projeção
+> Como segundo parâmetro do método find temos a projeção que especifica quais campos serão exibidos. 
+> Quando 1 é exibido e quando 0 não é exibido
+
+Retornar todos onde serão exibidos apenas os campos Série e Ano de Lançamento
+```
+db.series.find({}, {"Série": 1, "Ano de lançamento": 1, "_id": 0})
+```
+
+
+
+
