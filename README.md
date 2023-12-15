@@ -450,6 +450,57 @@ db.contas.aggregate([
 ])
 ```
 
+#### Formatando datas
+```
+db.alarmes.aggregate([
+    {
+        $project: {
+            datetime: {
+                $dateToString: {
+                    format: "%d/%m/%Y %H:%M:%S",
+                    date: "$datetime"
+                }
+            },
+            company: 1,
+            service: 1,
+            type: 1,
+            message: 1,
+            value: 1,
+            alarm: 1
+        }
+    },
+    { $limit: 10},
+    { $sort: {datetime: -1} }
+])
+```
+
+#### $cond 
+Operador condicional que dependendo da condição apresenta um determinado texto.
+```
+db.contas.aggregate([{
+    $project: {
+        cpf: 1,
+        tipo: 1,
+        valor: 1,
+        valores: {
+            $cond:[{$gte:["$valor", 8000]}, "VERDADEIRO", "FALSO"]
+        }
+    }
+}])
+```
+
+#### $ifNull
+Operador condicional que caso o valor seja null retorna o texto.
+```
+db.contas.aggregate([{
+    $project: {
+        valor: {
+            $ifNull: ["$valor", "Não Espcificado"]
+        }
+    }
+}])
+```
+
 
 
 
