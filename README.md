@@ -4,6 +4,9 @@
 ### MongoDB
 Descrição MOngoDB
 
+### Renomear collection
+db.Endereco.renameCollection("endereco")
+
 ### Insert
 Inserir documento(s) de uma collection.
 
@@ -93,17 +96,28 @@ db.series.deleteMany(
 )
 ```
 
-Exclui todos os documentos da collection
+Exclui todos os documentos da collection.
 ```
 db.series.deleteMany({})
 ```
 
 ### Find
-Realizar consultas
+Realizar consultas.
 
-Retornar todos
+Retornar todos os documentos.
 ```
 db.series.find()
+```
+
+Retornar todos os documentos onde ano de lançamento igual a 2018.
+```
+db.series.find({"Ano de lnaçamento": 2018})
+```
+
+#### FindOne
+Retorna o primeiro documento da collection.
+```
+db.series.findOne()
 ```
 
 #### Projeção
@@ -114,6 +128,159 @@ Retornar todos onde serão exibidos apenas os campos Série e Ano de Lançamento
 ```
 db.series.find({}, {"Série": 1, "Ano de lançamento": 1, "_id": 0})
 ```
+
+#### count
+Retorna a quantidade de documentos.
+```
+db.clientes.find().count()
+```
+
+#### distinct
+```
+db.clientes.find().distinct("tipo")
+```
+
+#### limit
+Cursor de modificação que exibe a quantidade de documentos especificados em limit.
+```
+db.series.find().limit(5)
+```
+
+#### sort
+Cursor de modificação que realiza a ordenação de acordo com o campo especificado.
+> Quando 1 é ascendente e -1 é descendente.
+```
+db.series.find().sort("Série": 1)
+db.series.find().sort("Série": -1)
+```
+
+#### skip
+Cursor de modificação que retorna os documentos a partir do número especificado.
+db.series.find().skip(200)
+
+#### Combinando cursores de modificação
+db.series.find().sort("Série": 1).limit(5)skip(200)
+
+#### $eq
+Operador de comparação, igual a.
+```
+db.clientes.find({genero: "Masculino"})
+db.clientes.find({"genero": {$eq: "Masculino"}})
+```
+
+#### $ne
+Operador de comparação, diferente.
+```
+db.clientes.find({"genero": {$ne: "Masculino"}})
+```
+
+#### $gt
+Operador de comparação, maior que.
+```
+db.contas.find({valor: {$gt: 9000}})
+```
+
+#### $gte
+Operador de comparação, maior ou igual a.
+```
+db.contas.find({valor: {$gte: 9000}})
+```
+
+#### $lt
+Operador de comparação, menor que.
+```
+db.contas.find({valor: {$lt: 9000}})
+```
+
+#### $lte
+Operador de comparação, menor ou igual a.
+```
+db.contas.find({valor: {$lte: 9000}})
+```
+
+#### $in
+Operador de comparação, caso o valor especificado exista no array passado.
+```
+db.clientes.find({"status_civil": {$in: ["Viúvo(a)", "Casado(a)"]}})
+```
+
+#### Combinando operadores de comparação
+Exemplo comparação maior que 50 e menor que 100.
+```
+db.produtos.find({peso:{$gt:50, $lt:100}})
+```
+
+#### $and
+Operador lógico e.
+```
+db.contas.find({
+    $and: [
+        {tipo: {$eq: "Conta salário"}},
+        {valor: {$gt: 9000}}    
+    ]
+})
+```
+
+#### $or
+Operador lógico ou.
+```
+db.contas.find({
+    $or: [
+        {tipo: {$eq: "Conta salário"}},
+        {valor: {$gt: 9000}}    
+    ]
+})
+```
+
+#### $not
+Operador lógico de negação.
+```
+db.contas.find({estado: {$not: {$eq: "SP"}}})
+```
+
+#### $exist
+Operador de elemento, checa se o elemento existe no documento.
+```
+db.clientes.find({seguros: {$exists: true}})
+```
+
+#### $type
+Operador de elemento, checa se o elemento é de um determinado tipo.
+> O tipo 2 significa tipo string.
+```
+db.clientes.find({seguros: {$type: 2}})
+```
+
+#### $all
+Operador de matriz
+```
+db.clientes.find({seguros: {$all: ["seguro de vida", "seguro para carro"]}})
+```
+
+#### $size
+Operador de matriz que checa se um determinado campo possui um array de duas posições.
+```
+db.clientes.find({dependentes: {$size: 2}})
+```
+
+#### $slice
+Operador de matriz que retorna um dos elementos do array na projeção.
+```
+db.clientes.find({dependentes: {$size: 2}}, {dependentes: {$slice:1}})
+```
+
+### Aggregate
+* Agrupar valores de vários documentos
+* Executar operações nos dados agrupados para retornar um único resultado
+* Analisar as mudanças de dados ao longo do tempo
+
+#### group
+Agrupa por um campo especificado
+```
+db.contas.aggregate({$group: {_id:"$tipo"}})
+```
+
+
 
 
 
