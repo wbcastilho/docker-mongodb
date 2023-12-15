@@ -4,7 +4,9 @@
 ### MongoDB
 Descrição MOngoDB
 
-### InsertOne
+### Insert
+
+#### InsertOne
 Faz o insert de um documento
 ```
 db.clientes.insertOne(
@@ -19,7 +21,7 @@ db.clientes.insertOne(
 )
 ```
 
-### InsertMany
+#### InsertMany
 Faz o insert de vários documentos
 ```
 db.clientes.insertOne([
@@ -50,7 +52,7 @@ db.clientes.insertOne([
 ])
 ```
 
-### UpdateOne
+#### UpdateOne
 Faz o update de um documento
 ```
 db.series.updateOne(
