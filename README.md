@@ -68,11 +68,6 @@ db.series.updateOne(
 )
 ```
 
-Operador $push, caso exista o campo ele atualiza e caso não exista ele cria.
-```
-db.clientes.updateOne({"_id": 1}, {$push: {seguros: "seguro de vida"}})
-```
-
 #### UpdateMany
 Faz o update de vários documentos.
 ```
@@ -80,6 +75,24 @@ db.restaurant.updateMany(
     { violations: { $gt: 4 } },
     { $set: { "Review" : true } }
 )
+```
+
+#### $push
+Operador $push, caso exista o campo ele atualiza e caso não exista ele cria.
+```
+db.clientes.updateOne({"_id": 1}, {$push: {seguros: "seguro de vida"}})
+```
+
+#### $rename
+Operador que renomeia o campo cpf de todos os documentos da collection clientes de cpf para CPF
+```
+db.clientes.updateMany({}, {$rename: {"cpf": "CPF"}})
+```
+
+#### $inc
+Operador que incrementa ou decrementa valores
+```
+db.contas.updateOne({cpf:"410.436.439-82"}, {$inc: {valor: -2000}})
 ```
 
 ### Delete
