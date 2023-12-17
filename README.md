@@ -68,6 +68,11 @@ db.series.updateOne(
 )
 ```
 
+Operador $push, caso exista o campo ele atualiza e caso não exista ele cria.
+```
+db.clientes.updateOne({"_id": 1}, {$push: {seguros: "seguro de vida"}})
+```
+
 #### UpdateMany
 Faz o update de vários documentos.
 ```
