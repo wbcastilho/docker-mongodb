@@ -8,7 +8,7 @@ Descrição MOngoDB
 db.Endereco.renameCollection("endereco")
 
 ### Insert
-Inserir documento(s) de uma collection.
+Inserir documento(s) a uma collection.
 
 #### InsertOne
 Faz o insert de um documento.
@@ -77,6 +77,18 @@ db.restaurant.updateMany(
 )
 ```
 
+#### $unset
+Altera o campo do documento
+```
+db.contas.updateOne({_id: 34}, {$set: {valor: "2000"}})
+```
+
+#### $unset
+Remove o campo do documento
+```
+db.contas.updateOne({_id: 34}, {$unset: {valor: ""}})
+```
+
 #### $push
 Operador $push, caso exista o campo ele atualiza e caso não exista ele cria.
 ```
@@ -93,6 +105,60 @@ db.clientes.updateMany({}, {$rename: {"cpf": "CPF"}})
 Operador que incrementa ou decrementa valores
 ```
 db.contas.updateOne({cpf:"410.436.439-82"}, {$inc: {valor: -2000}})
+```
+
+#### findAndModify
+Modifica e retorna um único documento de acordo com o filtro especificado na consulta.
+```
+db.contas.findAndModify({query: {_id:34}, update: {$unset: {valor:""}}})
+```
+
+Traz na consulta o valor já modificado devido ao new:true
+```
+db.contas.findAndModify(
+    {
+        query: {_id:34}, 
+        update: {$unset: {valor:""}},
+        new: true
+    }
+)
+```
+
+```
+db.contas.findAndModify(
+    {
+        query: {valor: {$lt: 500}}, 
+        sort: {valor: 1},
+        update: {$inc: {valor: 1000}},
+        new: true
+    }
+)
+```
+
+#### findOneAndUpdate
+Atualiza um único documento com base nos critérios especificados no filtro da consulta.
+```
+db.contas.findOneAndUpdate(
+    {_id: 34},
+    {$set: {valor: 5145.86}},
+    {returnNewDocument: true}
+)
+```
+
+#### findOneAndReplace
+Substitui um único documento de acordo com o filtro especificado na consulta.
+```
+db.clientes.findOneAndReplace(
+    {_id: 34},
+    {       
+       "nome": "Geraldo Benedito Ian", 
+       "cpf": "845.939.560-05", 
+       "data_nascimento": {"$date":"1977-06-01T18:00:00.000-03:00"},
+       "genero": "Masculino", 
+       "profissao": "Operador", 
+       "status_civil": "Viúvo(a)"
+   } 
+)
 ```
 
 ### Delete
@@ -117,6 +183,12 @@ db.series.deleteMany(
 Exclui todos os documentos da collection.
 ```
 db.series.deleteMany({})
+```
+
+#### findOneAndDelete
+Exclui um único documento com base nos critérios especificados na consulta e retorna como resultado o documento excluído.
+```
+db.contas.findOneAndDelete({valor: {$lt:100}}, {$sort:{valor:1}})
 ```
 
 ### Find
