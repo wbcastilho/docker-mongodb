@@ -4,6 +4,55 @@
 ### MongoDB
 Descrição MOngoDB
 
+### Softwares e utilitários
+* mongosh
+* MongoDB Compass
+* NoSQLBooster for MongoDB
+* mongodump
+* mongorestore
+
+### mongosh
+
+### MongoDB Compass
+
+### NoSQLBooster for MongoDB
+
+### mongodump
+É um utilitário que cria uma cópia do conteúdo de um banco de dados.
+
+Realizar o backup de um banco de dados.
+```
+mongodump --db=Vendas
+```
+
+Realizar o backup de uma coleção específica, informando um novo diretório
+```
+mongodump --collection=Pedidos --db=Vendas --out=C:\Curso\backup\pedidos
+```
+
+Excluir coleções específicas do backup
+```
+mongodump --db=Vendas --excludeCollection=Pedidos 
+```
+
+Comprimir a saída
+```
+mongodump --gzip --db=Vendas 
+```
+
+### mongorestore
+Importa dados de um arquivo gerado pelo mongodump ou outra entrada padrão.
+
+Restaurar um banco de dados
+```
+mongorestore --db=Vendas C:\Curso\backup\Vendas\Vendas 
+```
+
+Restaurar um banco de dados com arquivos compactados
+```
+mongorestore --gzip  --nsInclude="Vendas.*" C:\Curso\backup\compactada
+```
+
 ### Renomear collection
 db.Endereco.renameCollection("endereco")
 
